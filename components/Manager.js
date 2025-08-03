@@ -34,20 +34,21 @@ const Manager = () => {
 
   const defaultToastConfig = { position: "top-right", autoClose: 3000, hideProgressBar: false, closeOnClick: true, pauseOnHover: true, draggable: true, theme: "dark" };
 
-  useEffect(() => {
-    const savedPasswords = localStorage.getItem('nexlock-passwords')
+  const getPassword=async() => {
+    let req= await fetch("http://localhost:3000")
+    const savedPasswords = await req.json();
     if (savedPasswords) {
-      setPasswords(JSON.parse(savedPasswords))
+      setPasswords(savedPasswords)
     } else {
       setPasswords([])
     }
+  }
+  
+  useEffect(() => {
+    getPassword();
   }, [])
 
-  useEffect(() => {
-    if (passwords.length > 0) {
-      localStorage.setItem('nexlock-passwords', JSON.stringify(passwords));
-    }
-  }, [passwords]);
+  // Removed localStorage sync since we're using MongoDB
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
@@ -66,28 +67,68 @@ const Manager = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const savePassword = () => {
+  const savePassword = async () => {
     if (validateForm()) {
       if (editingId) {
-        const updatedPassword = {
-          id: editingId,
-          site: formData.site,
-          username: formData.username,
-          password: formData.password
+        try {
+          const updatedPassword = {
+            id: editingId,
+            site: formData.site,
+            username: formData.username,
+            password: formData.password
+          }
+
+          const response = await fetch("http://localhost:3000", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedPassword)
+          });
+
+          if (response.ok) {
+            // Refresh data from database instead of updating local state
+            await getPassword();
+            setFormData({ site: "", username: "", password: "" })
+            setEditingId(null)
+            setOriginalPassword(null)
+            toast.success("Password updated successfully!", { ...defaultToastConfig, className: "toast-save" });
+          } else {
+            throw new Error('Failed to update password');
+          }
+        } catch (error) {
+          console.error('Error updating password:', error);
+          toast.error("Failed to update password", { ...defaultToastConfig, className: "toast-error" });
         }
-
-        setPasswords(prev => [updatedPassword, ...prev.filter(p => p.id !== editingId)])
-        setFormData({ site: "", username: "", password: "" })
-        setEditingId(null)
-        setOriginalPassword(null)
-
-        toast.success("Password updated successfully!", { ...defaultToastConfig, className: "toast-save" });
       } else {
-        const newPassword = { id: uuidv4(), site: formData.site, username: formData.username, password: formData.password };
-        setPasswords(prev => [newPassword, ...prev]);
-        setFormData({ site: "", username: "", password: "" });
+        try {
+          const newPassword = { 
+            id: uuidv4(), 
+            site: formData.site, 
+            username: formData.username, 
+            password: formData.password 
+          };
 
-        toast.success("Password saved successfully!", { ...defaultToastConfig, className: "toast-save" });
+          const response = await fetch("http://localhost:3000", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newPassword)
+          });
+
+          if (response.ok) {
+            // Refresh data from database instead of updating local state
+            await getPassword();
+            setFormData({ site: "", username: "", password: "" });
+            toast.success("Password saved successfully!", { ...defaultToastConfig, className: "toast-save" });
+          } else {
+            throw new Error('Failed to save password');
+          }
+        } catch (error) {
+          console.error('Error saving password:', error);
+          toast.error("Failed to save password", { ...defaultToastConfig, className: "toast-error" });
+        }
       }
     }
   }
@@ -123,11 +164,30 @@ const Manager = () => {
   const deletePassword = (id) => {
     toast.dismiss();
 
-    const confirmDelete = () => {
-      setPasswords(prev => prev.filter(password => password.id !== id))
-      toast.dismiss();
+    const confirmDelete = async () => {
+      try {
+        const passwordToDelete = passwords.find(p => p.id === id);
+        
+        const response = await fetch("http://localhost:3000", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id: id })
+        });
 
-      toast.error("Password deleted successfully!", { ...defaultToastConfig, className: "toast-delete" });
+        if (response.ok) {
+          // Refresh data from database instead of updating local state
+          await getPassword();
+          toast.dismiss();
+          toast.error("Password deleted successfully!", { ...defaultToastConfig, className: "toast-delete" });
+        } else {
+          throw new Error('Failed to delete password');
+        }
+      } catch (error) {
+        console.error('Error deleting password:', error);
+        toast.error("Failed to delete password", { ...defaultToastConfig, className: "toast-error" });
+      }
     }
 
     const cancelDelete = () => {

@@ -10,6 +10,9 @@
 !.yarn/releases
 !.yarn/versions
 
+# Backend dependencies
+/backend/node_modules
+
 # testing
 /coverage
 
@@ -32,6 +35,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+backend/.env*
 
 # vercel
 .vercel
@@ -39,3 +43,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# MongoDB
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
