@@ -7,7 +7,7 @@ A secure and modern password manager built with **Next.js** frontend and **Expre
 ![Express](https://img.shields.io/badge/Express.js-4.18-green)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Local-brightgreen)
 
-![NexLOCK Password Manager](screenshot.png)
+![NexLOCK Password Manager](preview.png)
 
 ## ✨ Features
 
