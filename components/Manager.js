@@ -14,6 +14,24 @@ const Manager = () => {
   const [expandedPasswordId, setExpandedPasswordId] = useState(null);
   const getConfirmPosition = () => (window.innerWidth < 640 ? "top-right" : "top-center");
 
+  // Helper function to format URLs properly
+  const formatUrl = (url) => {
+    if (!url) return '';
+    
+    // If it already has a protocol, return as is
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+    
+    // If it starts with www. or other common patterns, add https://
+    if (url.startsWith('www.') || url.includes('.com') || url.includes('.org') || url.includes('.net') || url.includes('.edu') || url.includes('.gov')) {
+      return `https://${url}`;
+    }
+    
+    // For other cases, try to add https://
+    return `https://${url}`;
+  };
+
   const defaultToastConfig = { position: "top-right", autoClose: 3000, hideProgressBar: false, closeOnClick: true, pauseOnHover: true, draggable: true, theme: "dark" };
 
   useEffect(() => {
@@ -412,12 +430,15 @@ const Manager = () => {
                       <div key={password.id} className="px-[1vw] py-[1vh] hover:bg-gray-800/30 transition-colors duration-200">
                         <div className="hidden sm:grid grid-cols-4 gap-[1vw] items-center text-gray-300 text-sm">
                           <div className="flex items-center gap-2 lg:gap-3 min-w-0">
-                            <span
-                              className="truncate block cursor-pointer hover:text-white transition-colors max-w-[120px] lg:max-w-[200px]"
-                              title={password?.site || ''}
+                            <a
+                              href={formatUrl(password?.site || '')}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="truncate block cursor-pointer hover:text-blue-300 hover:underline transition-colors max-w-[120px] lg:max-w-[200px] text-blue-400"
+                              title={`Open ${password?.site || ''} in new tab`}
                             >
                               {(password?.site || '').length > 25 ? `${(password?.site || '').substring(0, 25)}...` : (password?.site || '')}
-                            </span>
+                            </a>
                             <button
                               className="text-gray-400 hover:text-white transition-colors flex-shrink-0 group relative p-1 hover:bg-gray-700/30 rounded"
                               title="Copy Site URL"
@@ -498,12 +519,15 @@ const Manager = () => {
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2 min-w-0 flex-1">
                                   <span className="text-xs text-purple-400 font-medium uppercase tracking-wide">Site</span>
-                                  <span
-                                    className="truncate text-gray-300 text-sm cursor-pointer hover:text-white transition-colors"
-                                    title={password?.site || ''}
+                                  <a
+                                    href={formatUrl(password?.site || '')}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="truncate text-blue-400 hover:text-blue-300 hover:underline text-sm cursor-pointer transition-colors"
+                                    title={`Open ${password?.site || ''} in new tab`}
                                   >
                                     {(password?.site || '').length > 20 ? `${(password?.site || '').substring(0, 20)}...` : (password?.site || '')}
-                                  </span>
+                                  </a>
                                 </div>
                                 <button
                                   className="text-gray-400 hover:text-purple-400 transition-colors flex-shrink-0 p-2 hover:bg-gray-700/30 rounded-lg"
@@ -611,12 +635,16 @@ const Manager = () => {
                                   </span>
                                 </div>
                                 <div className="min-w-0 flex-1">
-                                  <h3
-                                    className="truncate text-gray-200 text-base font-medium hover:text-white transition-colors"
-                                    title={password?.site || ''}
+                                  <a
+                                    href={formatUrl(password?.site || '')}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="truncate text-blue-400 hover:text-blue-300 hover:underline text-base font-medium transition-colors block"
+                                    title={`Open ${password?.site || ''} in new tab`}
+                                    onClick={(e) => e.stopPropagation()}
                                   >
                                     {(password?.site || '').length > 25 ? `${(password?.site || '').substring(0, 25)}...` : (password?.site || '')}
-                                  </h3>
+                                  </a>
                                   <p className="text-xs text-gray-500 truncate" title={password?.username || ''}>
                                     {(password?.username || '').length > 30 ? `${(password?.username || '').substring(0, 30)}...` : (password?.username || '')}
                                   </p>
