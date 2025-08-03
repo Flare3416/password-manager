@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+/* Prevent CSS conflicts with Tailwind spacing */
+.main-container {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Global Smooth Animations */
+* {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* Custom Scrollbar Styles */
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
@@ -23,5 +34,149 @@
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: rgba(75, 85, 99, 0.8) rgba(0, 0, 0, 0.3);
+}
+
+/* ===== TOAST STYLES ===== */
+
+/* Toast Container - Top Right */
+.Toastify__toast-container--top-right {
+  width: 350px !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  top: 1rem !important;
+  right: 1rem !important;
+}
+
+/* Toast Container - Top Center */
+.Toastify__toast-container--top-center {
+  width: 350px !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  top: 1rem !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+/* Base Toast Styling */
+.Toastify__toast {
+  background: rgba(30, 30, 30, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(60, 60, 60, 0.6) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+}
+
+/* Toast Types */
+.toast-copy {
+  background: rgba(25, 22, 30, 0.95) !important;
+  border: 1px solid rgba(139, 92, 246, 0.3) !important;
+}
+
+.toast-save {
+  background: rgba(22, 30, 25, 0.95) !important;
+  border: 1px solid rgba(34, 197, 94, 0.3) !important;
+}
+
+.toast-delete {
+  background: rgba(30, 22, 22, 0.95) !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+
+/* Toast Icons */
+.toast-copy .Toastify__toast-body::before {
+  content: '✓';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: rgba(139, 92, 246, 0.2);
+  border-radius: 50%;
+  color: #8b5cf6;
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.toast-save .Toastify__toast-body::before {
+  content: '✓';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: rgba(34, 197, 94, 0.2);
+  border-radius: 50%;
+  color: #22c55e;
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.toast-delete .Toastify__toast-body::before {
+  content: '✗';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: rgba(239, 68, 68, 0.2);
+  border-radius: 50%;
+  color: #ef4444;
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+/* Confirmation Toast */
+.toast-confirm-delete-clean {
+  background: rgba(30, 30, 30, 0.98) !important;
+  backdrop-filter: blur(16px) !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(60, 60, 60, 0.8) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6) !important;
+  min-width: 320px !important;
+  max-width: 400px !important;
+  padding: 24px !important;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .Toastify__toast-container--top-right,
+  .Toastify__toast-container--top-center {
+    width: calc(100vw - 16px) !important;
+    max-width: 340px !important;
+    top: 80px !important;
+    left: 45% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+  }
+  
+  .toast-confirm-delete-clean {
+    min-width: 280px !important;
+    max-width: 300px !important;
+    padding: 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .Toastify__toast-container--top-right,
+  .Toastify__toast-container--top-center {
+    width: calc(100vw - 12px) !important;
+    max-width: 300px !important;
+    top: 75px !important;
+    left: 45% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+  }
+  
+  .toast-confirm-delete-clean {
+    min-width: 260px !important;
+    max-width: 270px !important;
+    padding: 14px !important;
+  }
+
+  
 }
 
