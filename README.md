@@ -148,21 +148,11 @@ npm run dev
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
-
-This project is open source and available under the [MIT License](LICENSE).
 
 ## 👨‍💻 Author
 
 **Flare3416**
 - GitHub: [@Flare3416](https://github.com/Flare3416)
-
-## 🙏 Acknowledgments
-
-- Next.js team for the amazing framework
-- MongoDB for reliable database solution
-- Tailwind CSS for beautiful styling
-- React Toastify for smooth notifications
 
 ---
 
